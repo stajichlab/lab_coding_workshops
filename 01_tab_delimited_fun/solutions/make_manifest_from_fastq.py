@@ -7,7 +7,7 @@ import os
 import re
 import gzip
 
-name_patterns = [r'(\w+)_S\d+_R([12])_L\d+',
+name_patterns = [r'(\S+)_S\d+_R([12])_L\d+',
                  r'^(\S+)_R?([12])\.',
                  r'^(\S+)_pair([12])\.']
 
@@ -17,11 +17,12 @@ def main():
     # arg parse takes command-line arguments
     # like --input INFILE --output manifest.tsv
     parser = argparse.ArgumentParser(
-        prog='make_manifest.py',
+        prog='make_manifest_from_fastq.py',
         description='Generate a manifest file from a folder of FASTQ files',
         epilog='Run on a folder as input')
     # this will take the argument --input (or -i) as name of directory to read
-    parser.add_argument('-i', '--input', required=True, type=str,
+    parser.add_argument('-i', '--input',
+                        required=True, type=str,
                         help='Input folder')
     # this will take the argument --output (or -o) to save the manifest results
     # if not provided this it will default to writing to STDOUT
@@ -53,6 +54,9 @@ def main():
         # the $ means the string has to end with this pattern
         # we are using regular expression library (re)
         rc = re.search(r'(\S+)\.(FASTQ|fq|FQ|fastq)(\.gz)?$', file)
+        # could try to write this like this but takes more writing
+        # if file.endswith('.fq') or file.endswith('.fastq'):
+
         # after running the regex we get a result, if it matched
         # the 'if rc' will return true
         if rc:
@@ -98,9 +102,9 @@ def main():
             # otherwise our filename did not match the pattern looking
             # for those ending in fastq/FASTQ and .gz
             print(f'no match {file}')
+    # write a header for the manifest
     csvout.writerow(['SampleID', 'Read_1', 'Read_2',
                      'Read_1_Count', 'Read_2_Count'])
-
     for sample in sorted(data):
         csvout.writerow([sample,
                         data[sample]['1'],
