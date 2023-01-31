@@ -48,7 +48,7 @@ def main():
     # a list of files
     # use the for loop to iterate through these
     for file in os.listdir(args.input):
-        # check for files which end with the pattern of 
+        # check for files which end with the pattern of
         # .FASTQ .fq .FQ .fastq and optionally + .gz
         # the $ means the string has to end with this pattern
         # we are using regular expression library (re)
@@ -56,7 +56,7 @@ def main():
         # after running the regex we get a result, if it matched
         # the 'if rc' will return true
         if rc:
-            # lets setup some variables which will store the info 
+            # lets setup some variables which will store the info
             # we will parse from sample name and forward or reverse
             # strand info
             samplename = None
@@ -65,7 +65,7 @@ def main():
             # the script which are the different ways files might
             # be named
             for pattern in name_patterns:
-                # two values are captured in the patterns one is sample 
+                # two values are captured in the patterns one is sample
                 # name and one is read direction
                 r2 = re.match(pattern, file)
                 if r2:
